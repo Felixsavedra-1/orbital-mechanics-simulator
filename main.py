@@ -1,11 +1,6 @@
 import argparse
 
-from report import (
-    render_concept_stations,
-    render_earth_orbits,
-    render_mars_base_concept,
-    render_planet_velocities,
-)
+from report import render_report
 
 
 def parse_args():
@@ -18,27 +13,30 @@ def parse_args():
         default="all",
         help="Select which section to display.",
     )
+    parser.add_argument(
+        "--format",
+        choices=["text", "json", "csv"],
+        default="text",
+        help="Select report output format.",
+    )
+    parser.add_argument(
+        "--output",
+        default="",
+        help="Optional output file path. If omitted, prints to stdout.",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
+    report_body = render_report(args.section, args.format)
 
-    print("--PLANET ORBITAL SIMULATION & SPACE EXPLORATION GUIDE--")
-    print("Project Summary: planet data, sustainability & space travel concepts - 🚀 🪐 🌱 ")
-
-    sections = {
-        "planets": render_planet_velocities,
-        "earth": render_earth_orbits,
-        "concepts": render_concept_stations,
-        "mars-base": render_mars_base_concept,
-    }
-
-    if args.section == "all":
-        for renderer in sections.values():
-            renderer()
+    if args.output:
+        with open(args.output, "w", encoding="utf-8") as output_file:
+            output_file.write(report_body + "\n")
+        print(f"Report written to {args.output}")
     else:
-        sections[args.section]()
+        print(report_body)
 
 
 if __name__ == "__main__":

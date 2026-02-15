@@ -15,6 +15,12 @@ class TestCalculations(unittest.TestCase):
         velocity_km = calculate_orbital_velocity(moon_orbital_radius, EARTH_MASS)
         self.assertTrue(0.8 <= velocity_km <= 1.2)
 
+    def test_invalid_orbital_velocity_inputs_raise(self):
+        with self.assertRaises(ValueError):
+            calculate_orbital_velocity(0, EARTH_MASS)
+        with self.assertRaises(ValueError):
+            calculate_orbital_velocity(1, 0)
+
 
 if __name__ == "__main__":
     unittest.main()
