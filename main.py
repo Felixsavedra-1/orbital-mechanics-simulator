@@ -1,6 +1,6 @@
 import argparse
 
-from report import render_report
+from report import VALID_OUTPUT_FORMATS, VALID_SECTIONS, render_report
 
 
 def parse_args():
@@ -9,13 +9,13 @@ def parse_args():
     )
     parser.add_argument(
         "--section",
-        choices=["all", "planets", "earth", "concepts", "mars-base"],
+        choices=VALID_SECTIONS,
         default="all",
         help="Select which section to display.",
     )
     parser.add_argument(
         "--format",
-        choices=["text", "json", "csv"],
+        choices=VALID_OUTPUT_FORMATS,
         default="text",
         help="Select report output format.",
     )

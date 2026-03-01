@@ -12,6 +12,8 @@ VALUE_WIDTH = 14
 REPORT_TITLE = "PLANET ORBITAL SIMULATION & SPACE EXPLORATION GUIDE"
 REPORT_SCHEMA_VERSION = "1.0.0"
 SECTION_ORDER = ["planets", "earth", "concepts", "mars-base"]
+VALID_SECTIONS = ["all", *SECTION_ORDER]
+VALID_OUTPUT_FORMATS = ["text", "json", "csv"]
 SECTION_TITLES = {
     "planets": "PLANET ORBITAL VELOCITY DATA",
     "earth": "EARTH ORBITAL SYSTEMS",
@@ -105,6 +107,7 @@ def _mars_base_records():
 
 
 def collect_records(section):
+    _validate_section(section)
     by_section = {
         "planets": _planet_velocity_records,
         "earth": _earth_orbit_records,
@@ -166,9 +169,24 @@ def render_csv(section):
 
 
 def render_report(section, output_format):
+    _validate_section(section)
+    _validate_output_format(output_format)
+
     renderers = {
         "text": render_text,
         "json": render_json,
         "csv": render_csv,
     }
     return renderers[output_format](section)
+
+
+def _validate_section(section):
+    if section not in VALID_SECTIONS:
+        valid_sections = ", ".join(VALID_SECTIONS)
+        raise ValueError(f"Unsupported section '{section}'. Valid options: {valid_sections}")
+
+
+def _validate_output_format(output_format):
+    if output_format not in VALID_OUTPUT_FORMATS:
+        valid_formats = ", ".join(VALID_OUTPUT_FORMATS)
+        raise ValueError(f"Unsupported output format '{output_format}'. Valid options: {valid_formats}")

@@ -1,7 +1,13 @@
 import unittest
 
 from constants import AU, EARTH_MASS, EARTH_RADIUS, ISS_ALTITUDE, MOON_ORBITAL_RADIUS, SUN_MASS
-from data import CONCEPT_STATIONS, EARTH_ORBITS, ISS_TO_MOON_DISTANCE, PLANETS
+from data import (
+    CONCEPT_STATIONS,
+    EARTH_MARS_MIN_SEPARATION_LOWER_BOUND,
+    EARTH_ORBITS,
+    ISS_TO_MOON_DISTANCE,
+    PLANETS,
+)
 
 
 class TestData(unittest.TestCase):
@@ -38,6 +44,8 @@ class TestData(unittest.TestCase):
 
         earth_mars = CONCEPT_STATIONS[1]
         self.assertEqual(earth_mars[0], "Earth-Mars midpoint")
+        self.assertIn("lower-bound Earth-Mars separation", earth_mars[2])
+        self.assertEqual(earth_mars[1], EARTH_MARS_MIN_SEPARATION_LOWER_BOUND / 2)
         self.assertGreater(earth_mars[1], 0)
 
     def test_earth_planet_distance_close_to_one_au(self):
